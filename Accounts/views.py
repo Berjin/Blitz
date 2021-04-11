@@ -43,3 +43,37 @@ def customer_dashboard(request):
     else:
         
         return HttpResponse("Not authorized")
+
+def customer_request(request):
+    is_customer=request.COOKIES.get('is_customer')
+
+    print(is_customer)
+    if  is_customer=='1':
+        
+        
+        print(is_customer)
+        if request.method=='POST':
+            cursor=connection.cursor()
+            sql1 = "CREATE TABLE IF NOT EXISTS orders(oid int NOT NULL AUTO_INCREMENT PRIMARY KEY,vehicleno varchar(255),modelname varchar(255) NOT NULL,description varchar(255) , price varchar(255) ,datetime varchar(255),location varchar(255),cid int)"
+            cursor.execute(sql1)
+
+            cid=int(request.COOKIES.get('cid'))
+            vehiclemodel=request.POST['vehiclemodel']
+            description=request.POST['description']
+            vehicleno=request.POST['vehicleno']
+            location=request.POST['location']
+            datetime=request.POST['datetime']
+            
+            
+            sql2="INSERT INTO orders(modelname,vehicleno,description,cid,location,datetime) VALUES (%s,%s,%s,%s,%s,%s)"
+            val=(vehiclemodel,vehicleno,description,cid,location,datetime)
+            cursor.execute(sql2,val)
+            return HttpResponse("successfull")
+
+        else:
+
+            return render(request,'customerrequest.html')
+
+    else:
+         return HttpResponse("Not authorized")
+ 
