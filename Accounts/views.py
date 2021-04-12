@@ -76,4 +76,31 @@ def customer_request(request):
 
     else:
          return HttpResponse("Not authorized")
+
+
+
+def customer_signup(request):
+    if request.method=='POST':
+
+        username=request.POST['username']
+        password=request.POST['password']
+        email=request.POST['email']
+        phoneno=request.POST['phoneno']
+        vehicleno=request.POST['vehicleno']
+        cursor=connection.cursor()
+        sql1="CREATE TABLE IF NOT EXISTS customer(cid int NOT NULL AUTO_INCREMENT PRIMARY KEY,cname varchar(255),cpassword varchar(255) NOT NULL,email varchar(255) , phoneno varchar(255) ,vehicleno varchar(255))"
+        cursor.execute(sql1)
+        sql2=   "INSERT INTO customer(cname,cpassword,phoneno,email,vehicleno) VALUES (%s,%s,%s,%s,%s)"
+        val=(username,password,phoneno,email,vehicleno)
+        cursor.execute(sql2,val)
+        
+        return HttpResponse("successfull")        
+
+    else:    
+        return render(request,'customer_signup.html')
+        
+        
+
+
+
  
