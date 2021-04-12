@@ -54,7 +54,7 @@ def customer_request(request):
         print(is_customer)
         if request.method=='POST':
             cursor=connection.cursor()
-            sql1 = "CREATE TABLE IF NOT EXISTS orders(oid int NOT NULL AUTO_INCREMENT PRIMARY KEY,vehicleno varchar(255),modelname varchar(255) NOT NULL,description varchar(255) , price varchar(255) ,datetime varchar(255),location varchar(255),cid int)"
+            sql1 = "CREATE TABLE IF NOT EXISTS orders(oid int NOT NULL AUTO_INCREMENT PRIMARY KEY,vehicleno varchar(255),modelname varchar(255) NOT NULL,description varchar(255) , price varchar(255) ,datetime varchar(255),location varchar(255),status varchar(255) DEFAULT 'pending',cid int)"
             cursor.execute(sql1)
 
             cid=int(request.COOKIES.get('cid'))
@@ -68,11 +68,11 @@ def customer_request(request):
             sql2="INSERT INTO orders(modelname,vehicleno,description,cid,location,datetime) VALUES (%s,%s,%s,%s,%s,%s)"
             val=(vehiclemodel,vehicleno,description,cid,location,datetime)
             cursor.execute(sql2,val)
-            return HttpResponse("successfull")
+            return render(request,'customerrequest.html',{'status':'Request Created Successfully'})
 
         else:
 
-            return render(request,'customerrequest.html')
+            return render(request,'customerrequest.html',{'status':''})
 
     else:
          return HttpResponse("Not authorized")
@@ -88,16 +88,16 @@ def customer_signup(request):
         phoneno=request.POST['phoneno']
         vehicleno=request.POST['vehicleno']
         cursor=connection.cursor()
-        sql1="CREATE TABLE IF NOT EXISTS customer(cid int NOT NULL AUTO_INCREMENT PRIMARY KEY,cname varchar(255),cpassword varchar(255) NOT NULL,email varchar(255) , phoneno varchar(255) ,vehicleno varchar(255))"
+        sql1="CREATE TABLE IF NOT EXISTS customer(cid int NOT NULL AUTO_INCREMENT PRIMARY KEY,cname varchar(255) UNIQUE,cpassword varchar(255) NOT NULL,email varchar(255) , phoneno varchar(255) ,vehicleno varchar(255))"
         cursor.execute(sql1)
-        sql2=   "INSERT INTO customer(cname,cpassword,phoneno,email,vehicleno) VALUES (%s,%s,%s,%s,%s)"
+        sql2=   "INSERT INTO customer(cname ,cpassword,phoneno,email,vehicleno) VALUES (%s,%s,%s,%s,%s)"
         val=(username,password,phoneno,email,vehicleno)
         cursor.execute(sql2,val)
-        
-        return HttpResponse("successfull")        
+        return render(request,'customer_signup.html',{'status':'your account has been successfully created'})
+                
 
     else:    
-        return render(request,'customer_signup.html')
+        return render(request,'customer_signup.html',{'status':''})
         
         
 
