@@ -13,8 +13,7 @@ def customer_login_view(request):
         cursor.execute( "SELECT cpassword,cid FROM customer WHERE cname=%s",[username])
         r=cursor.fetchall()   
         for  p in r:
-            print (p)
-            print (p[0])
+           
             
             if p[0]==password:
                 print("success")
@@ -35,7 +34,7 @@ def customer_login_view(request):
 
 def customer_dashboard(request):
     is_customer=request.COOKIES.get('is_customer')
-    print(is_customer)
+   
     if is_customer=='1':
       
         return render(request,'customerbase.html')
@@ -47,11 +46,10 @@ def customer_dashboard(request):
 def customer_request(request):
     is_customer=request.COOKIES.get('is_customer')
 
-    print(is_customer)
     if  is_customer=='1':
         
         
-        print(is_customer)
+       
         if request.method=='POST':
             cursor=connection.cursor()
             sql1 = "CREATE TABLE IF NOT EXISTS orders(oid int NOT NULL AUTO_INCREMENT PRIMARY KEY,vehicleno varchar(255),modelname varchar(255) NOT NULL,description varchar(255) , price varchar(255) ,datetime varchar(255),location varchar(255),status varchar(255) DEFAULT 'pending',cid int)"
@@ -80,24 +78,80 @@ def customer_request(request):
 
 
 def customer_signup(request):
-    if request.method=='POST':
+  
+    
+  
+        if request.method=='POST':
 
-        username=request.POST['username']
-        password=request.POST['password']
-        email=request.POST['email']
-        phoneno=request.POST['phoneno']
-        vehicleno=request.POST['vehicleno']
-        cursor=connection.cursor()
-        sql1="CREATE TABLE IF NOT EXISTS customer(cid int NOT NULL AUTO_INCREMENT PRIMARY KEY,cname varchar(255) UNIQUE,cpassword varchar(255) NOT NULL,email varchar(255) , phoneno varchar(255) ,vehicleno varchar(255))"
-        cursor.execute(sql1)
-        sql2=   "INSERT INTO customer(cname ,cpassword,phoneno,email,vehicleno) VALUES (%s,%s,%s,%s,%s)"
-        val=(username,password,phoneno,email,vehicleno)
-        cursor.execute(sql2,val)
-        return render(request,'customer_signup.html',{'status':'your account has been successfully created'})
+            username=request.POST['username']
+            password=request.POST['password']
+            email=request.POST['email']
+            phoneno=request.POST['phoneno']
+            vehicleno=request.POST['vehicleno']
+            cursor=connection.cursor()
+            sql1="CREATE TABLE IF NOT EXISTS customer(cid int NOT NULL AUTO_INCREMENT PRIMARY KEY,cname varchar(255) UNIQUE,cpassword varchar(255) NOT NULL,email varchar(255) , phoneno varchar(255) ,vehicleno varchar(255))"
+            cursor.execute(sql1)
+            sql2=   "INSERT INTO customer(cname ,cpassword,phoneno,email,vehicleno) VALUES (%s,%s,%s,%s,%s)"
+            val=(username,password,phoneno,email,vehicleno)
+            cursor.execute(sql2,val)
+            return render(request,'customer_signup.html',{'status':'your account has been successfully created'})
                 
 
-    else:    
-        return render(request,'customer_signup.html',{'status':''})
+        else:    
+            return render(request,'customer_signup.html',{'status':''})
+
+
+    
+
+
+def customer_profile(request):
+    is_customer=request.COOKIES.get('is_customer')
+    if is_customer=='1':
+
+        if request.method=='POST':
+            cursor=connection.cursor()
+            cid=int(request.COOKIES.get('cid'))
+            username=request.POST['username']
+            password=request.POST['password']
+            email=request.POST['email']
+            phoneno=request.POST['phoneno']
+            vehicleno=request.POST['vehicleno']
+
+            sql1="UPDATE customer SET cname=%s, cpassword=%s,phoneno=%s,email=%s, vehicleno=%s WHERE cid=%s"
+            val=(username,password,phoneno,email,vehicleno,cid)
+            cursor.execute(sql1,val)
+            response= redirect('/customer-profile')
+            return response
+
+    
+
+        else:
+            cid=int(request.COOKIES.get('cid'))
+            cursor=connection.cursor()
+            cursor.execute( "SELECT cname,cpassword,email,phoneno,vehicleno FROM customer WHERE cid=%s",[cid])
+            r=cursor.fetchall() 
+            for  p in r:
+
+                username=p[0]
+                password=p[1]
+                email=p[2]
+                phoneno=p[3]
+                vehicleno=p[4]
+
+            return render(request,'customer_profile.html',{'username':username,'password':password,'email':email,'phoneno':phoneno,'vehicleno':vehicleno})
+            
+
+
+    else:
+
+
+        return HttpResponse("Not authorized")
+
+
+
+
+
+
         
         
 
