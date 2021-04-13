@@ -17,7 +17,7 @@ def customer_login_view(request):
             
             if p[0]==password:
                 print("success")
-                response= redirect('customerdashboard/')
+                response= redirect('/customerdashboard')
                 response.set_cookie('cid',p[1])
                 response.set_cookie('is_customer','1')
                 return response
@@ -91,8 +91,10 @@ def customer_signup(request):
             cursor=connection.cursor()
             sql1="CREATE TABLE IF NOT EXISTS customer(cid int NOT NULL AUTO_INCREMENT PRIMARY KEY,cname varchar(255) UNIQUE,cpassword varchar(255) NOT NULL,email varchar(255) , phoneno varchar(255) ,vehicleno varchar(255))"
             cursor.execute(sql1)
-            sql2=   "INSERT INTO customer(cname ,cpassword,phoneno,email,vehicleno) VALUES (%s,%s,%s,%s,%s)"
-            val=(username,password,phoneno,email,vehicleno)
+            sql2=   "INSERT INTO customer(cname ,cpassword,email,vehicleno) VALUES (%s,%s,%s,%s)"
+            val=(username,password,email,vehicleno)
+            # sql2=   "INSERT INTO customer(cname ,cpassword,phoneno,email,vehicleno) VALUES (%s,%s,%s,%s,%s)"
+            # val=(username,password,phoneno,email,vehicleno)
             cursor.execute(sql2,val)
             return render(request,'customer_signup.html',{'status':'your account has been successfully created'})
                 
@@ -117,8 +119,11 @@ def customer_profile(request):
             phoneno=request.POST['phoneno']
             vehicleno=request.POST['vehicleno']
 
-            sql1="UPDATE customer SET cname=%s, cpassword=%s,phoneno=%s,email=%s, vehicleno=%s WHERE cid=%s"
-            val=(username,password,phoneno,email,vehicleno,cid)
+            # sql1="UPDATE customer SET cname=%s, cpassword=%s,phoneno=%s,email=%s, vehicleno=%s WHERE cid=%s"
+            sql1="UPDATE customer SET cname=%s, cpassword=%s,email=%s, vehicleno=%s WHERE cid=%s"
+            # val=(username,password,phoneno,email,vehicleno,cid)
+            val=(username,password,email,vehicleno,cid)
+
             cursor.execute(sql1,val)
             response= redirect('/customer-profile')
             return response
@@ -128,17 +133,20 @@ def customer_profile(request):
         else:
             cid=int(request.COOKIES.get('cid'))
             cursor=connection.cursor()
-            cursor.execute( "SELECT cname,cpassword,email,phoneno,vehicleno FROM customer WHERE cid=%s",[cid])
+            # cursor.execute( "SELECT cname,cpassword,email,phoneno,vehicleno FROM customer WHERE cid=%s",[cid])
+            cursor.execute( "SELECT cname,cpassword,email,vehicleno FROM customer WHERE cid=%s",[cid])
             r=cursor.fetchall() 
             for  p in r:
 
                 username=p[0]
                 password=p[1]
                 email=p[2]
-                phoneno=p[3]
-                vehicleno=p[4]
+                # phoneno=p[3]
+                # vehicleno=p[4]
+                vehicleno=p[3]
+            return render(request,'customer_profile.html',{'username':username,'password':password,'email':email,'vehicleno':vehicleno})
 
-            return render(request,'customer_profile.html',{'username':username,'password':password,'email':email,'phoneno':phoneno,'vehicleno':vehicleno})
+            # return render(request,'customer_profile.html',{'username':username,'password':password,'email':email,'phoneno':phoneno,'vehicleno':vehicleno})
             
 
 
