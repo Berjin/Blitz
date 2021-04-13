@@ -5,6 +5,7 @@ from django.db import connection
 from django.http import HttpResponse
 from django.template import loader
 # Create your views here.
+
 def customer_login_view(request):
     if request.method=='POST':
         username=request.POST['username']
@@ -98,6 +99,43 @@ def customer_signup(request):
 
     else:    
         return render(request,'customer_signup.html',{'status':''})
+
+
+def employee_login_view(request):
+    if request.method=='POST':
+        username=request.POST['username']
+        password=request.POST['password']
+        cursor=connection.cursor()
+        cursor.execute( "SELECT epassword,eid FROM employee WHERE ename=%s",[username])
+        r=cursor.fetchall()   
+        for  p in r:
+            print (p)
+            print (p[0])
+            
+            if p[0]==password:
+                print("success")
+                response= redirect('employeedashboard/')
+                response.set_cookie('eid',p[1])
+                response.set_cookie('is_employee','1')
+                return response
+                
+
+        
+        return render(request,'employee_login.html')                
+
+    else: 
+        return render(request,'employee_login.html')
+
+def employee_dashboard(request):
+    is_employee=request.COOKIES.get('is_employee')
+    print(is_employee)
+    if is_employee=='1':
+      
+        return render(request,'employeebase.html')
+       
+    else:
+        
+        return HttpResponse("Not authorized")
         
         
 
