@@ -1,47 +1,35 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block head %}
-<link rel="stylesheet" href="{% static 'styles/attendance.css' %}">
-<title>Attendance </title>
+<title>Profile</title>
 {% endblock %}
 {% block content %}
 <div id="main">
-    <!DOCTYPE html>
-<html lang="en">
-
-<head>
     <form action="customer-profile" method="POST">
         {% csrf_token %}
         <div class="form-group">
-          <label for="exampleInputEmail1">username</label>
+          <label for="exampleInputEmail1">Username</label>
           <input type="name" class="form-control" name="username" id="exampleInputEmail1" aria-describedby="emailHelp" value={{username}}>
           
         </div>
         <div class="form-group">
-          <label for="exampleInputPassword1">password</label>
+          <label for="exampleInputPassword1">Password</label>
           <input type="name" class="form-control" id="exampleInputPassword1" name="password" value={{password}}>
         </div>
         <div class="form-group">
-            <label for="exampleInputEmail1">email</label>
+            <label for="exampleInputEmail1">E-mail</label>
             <input type="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={{email}} name="email">
            
           </div>
 
           
           <div class="form-group">
-            <label for="exampleInputEmail1">vehiclenumber</label>
+            <label for="exampleInputEmail1">Vehicle Number</label>
             <input type="name" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" value={{vehicleno}} name="vehicleno">
           
           </div>
        
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
-
-</body><!-- This templates was made by Colorlib (https://colorlib.com) -->
-
-</html>
-
-
-   
-</div>
+      </div>
 {% endblock %}
