@@ -78,7 +78,6 @@
 
 
 
-
 	<!-- sidebar -->
 	<div class="sidebar">
 		<ul class="sidebar-nav">
@@ -90,7 +89,14 @@
 					</div>
 					<span>
 						Dashboard
+						
 					</span>
+					<div>
+						{% for item in current_order %}    
+						{{ item.0 }} {{ item.1}} {{ item.2 }} {{ item.3 }}     
+						{% endfor %}
+					</div>
+					
 				</a>
 			</li>
 
@@ -114,9 +120,9 @@
 
 	<!--content start-->
 	<div class="content">
-
 		{% block content %}
-
+		
+		
 		{% endblock content %}
 	</div>
 	<!--content end-->

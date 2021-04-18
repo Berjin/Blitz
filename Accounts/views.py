@@ -55,7 +55,7 @@ def customer_request(request):
         print(is_customer)
         if request.method=='POST':
             cursor=connection.cursor()
-            sql1 = "CREATE TABLE IF NOT EXISTS orders(oid int NOT NULL AUTO_INCREMENT PRIMARY KEY,vehicleno varchar(255),modelname varchar(255) NOT NULL,description varchar(255) , price varchar(255) ,datetime varchar(255),location varchar(255),status varchar(255) DEFAULT 'pending',cid int)"
+            sql1 = "CREATE TABLE IF NOT EXISTS orders(oid int NOT NULL AUTO_INCREMENT PRIMARY KEY,vehicleno varchar(255),modelname varchar(255) NOT NULL,description varchar(255) , price varchar(255) ,datetime varchar(255),location varchar(255),status varchar(255) DEFAULT 'pending',cid int,empid int)"
             cursor.execute(sql1)
 
             cid=int(request.COOKIES.get('cid'))
@@ -128,14 +128,22 @@ def employee_login_view(request):
 
 def employee_dashboard(request):
     is_employee=request.COOKIES.get('is_employee')
+    eid=int(request.COOKIES.get('eid'))
+    print(eid)
     print(is_employee)
     if is_employee=='1':
+        cursor=connection.cursor()        
+        cursor.execute("SELECT cid,vehicleno,modelname,description FROM orders WHERE empid=%s  ",[eid])
+        current_order=cursor.fetchall()
+        print(current_order)
+        return render(request,'employeebase.html',{'current_order':current_order})
       
-        return render(request,'employeebase.html')
+        
        
     else:
         
         return HttpResponse("Not authorized")
+ 
         
         
 
