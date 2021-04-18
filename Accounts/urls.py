@@ -11,5 +11,5 @@ urlpatterns = [
     path('orders/',views.orders,name='orders'),
     path('signup/',views.customer_signup,name='customersignup'),
     path('employeelogin/', views.employee_login_view,name='employeelogin'),
-    path('employeedashboard/',views.employee_dashboard, name='employee_dashboard')
+    path('employeedashboard',views.employee_dashboard, name='employee_dashboard')
 ]
