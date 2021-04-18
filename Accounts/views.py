@@ -5,6 +5,13 @@ from django.db import connection
 from django.http import HttpResponse
 from django.template import loader
 
+def dictfetchall(cursor):
+    desc = cursor.description
+    return [
+        dict(zip([col[0] for col in desc], row))
+        for row in cursor.fetchall()
+    ]
+
 def customer_login_view(request):
     if request.method=='POST':
         username=request.POST['username']
@@ -30,10 +37,9 @@ def customer_dashboard(request):
     is_customer=request.COOKIES.get('is_customer')
     print(is_customer)
     if is_customer=='1':
-        return render(request,'customerbase.html')
+        return render(request,'base.html')
     else:
-        return HttpResponse("Not authorized")
-
+        return redirect('/')
 def customer_request(request):
     is_customer=request.COOKIES.get('is_customer')
     print(is_customer)
@@ -56,18 +62,23 @@ def customer_request(request):
             sql2="INSERT INTO orders(modelname,vehicleno,description,cid,location,datetime) VALUES (%s,%s,%s,%s,%s,%s)"
             val=(vehiclemodel,vehicleno,description,cid,location,datetime)
             cursor.execute(sql2,val)
-            return render(request,'customerrequest.html',{'status':'Request Created Successfully'})
-
+            return render(request,'request.html',{'status':'Request Created Successfully'})
         else:
-
-            return render(request,'customerrequest.html',{'status':''})
+            return render(request,'request.html',{'status':''})
 
     else:
-         return HttpResponse("Not authorized")
+         return redirect('/')
 
 def home(request):
     context = {}
     return render(request,'base.html',context)
+
+def logout(request):
+    response= redirect('/')
+    response.set_cookie('cid',0)
+    response.set_cookie('eid',0)
+    response.set_cookie('is_customer','0')
+    return response
 
 def customer_signup(request):
     if request.method=='POST':
@@ -89,6 +100,13 @@ def customer_signup(request):
     else:    
         return render(request,'customer_signup.html',{'status':''})
 
+def orders(request):
+    cid=int(request.COOKIES.get('cid'))
+    cursor=connection.cursor()
+    cursor.execute("SELECT vehicleno,modelname,description,status FROM orders WHERE cid=%s ",[cid])
+    var=dictfetchall(cursor)
+    context={'orders':var}
+    return render(request,'orders.html',context)
 
 def employee_login_view(request):
     if request.method=='POST':
@@ -119,11 +137,8 @@ def employee_dashboard(request):
     is_employee=request.COOKIES.get('is_employee')
     print(is_employee)
     if is_employee=='1':
-      
         return render(request,'employeebase.html')
-       
     else:
-        
         return HttpResponse("Not authorized")
         
         

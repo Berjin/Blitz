@@ -21,8 +21,9 @@
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
         <a href="{% url 'customer_dashboard' %}"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
         <a href="{% url 'customer_dashboard' %}"><i class="fa fa-clipboard" aria-hidden="true"></i> Dashboard</a>
-        <a href="{% url 'customer_dashboard' %}"><i class="fa fa-calendar" aria-hidden="true"></i> Request</a>
+        <a href="{% url 'request' %}"><i class="fa fa-calendar" aria-hidden="true"></i> Request</a>
         <a href="{% url 'customer_dashboard' %}"><i class="fa fa-calendar-check-o"></i> Invoice</a>
+        <a href="{% url 'orders' %}"><i class="fa fa-calendar-check-o"></i> Orders</a>
         <a href="{% url 'customer_dashboard' %}"><i class="fa fa-book" aria-hidden="true"></i> Feedback</a>
     </div>
    {% include 'navbar.html' %}
