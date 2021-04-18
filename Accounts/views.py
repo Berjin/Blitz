@@ -179,7 +179,7 @@ def employee_login_view(request):
                     return response
                 else:
 
-                    response= redirect('employeedashboard/')
+                    response= redirect('/employeedashboard')
                     response.set_cookie('eid',p[1])
                     response.set_cookie('is_employee','1')
                     response.set_cookie('is_admin','0')
