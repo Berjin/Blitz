@@ -42,7 +42,7 @@ def customer_request(request):
         print(is_customer)
         if request.method=='POST':
             cursor=connection.cursor()
-            sql1 = "CREATE TABLE IF NOT EXISTS orders(oid int NOT NULL AUTO_INCREMENT PRIMARY KEY,vehicleno varchar(255),modelname varchar(255) NOT NULL,description varchar(255) , price varchar(255) ,datetime varchar(255),location varchar(255),status varchar(255) DEFAULT 'pending',cid int,empid int)"
+            sql1 = "CREATE TABLE IF NOT EXISTS orders(oid int NOT NULL AUTO_INCREMENT PRIMARY KEY,vehicleno varchar(255),modelname varchar(255) NOT NULL,description varchar(255) , price varchar(255) ,datetime varchar(255),location varchar(255),status varchar(255) DEFAULT 'Pending',cid int,empid int)"
             cursor.execute(sql1)
 
             cid=int(request.COOKIES.get('cid'))
@@ -115,23 +115,39 @@ def employee_login_view(request):
     else: 
         return render(request,'employee_login.html')
 
+def dictfetchall(cursor):
+    desc = cursor.description
+    return [
+        dict(zip([col[0] for col in desc], row))
+        for row in cursor.fetchall()
+    ]
+
 def employee_dashboard(request):
     is_employee=request.COOKIES.get('is_employee')
     eid=int(request.COOKIES.get('eid'))
     print(eid)
     print(is_employee)
     if is_employee=='1':
-        cursor=connection.cursor()        
-        cursor.execute("SELECT cid,vehicleno,modelname,description FROM orders WHERE empid=%s  ",[eid])
-        current_order=cursor.fetchall()
-        print(current_order)
-        return render(request,'employeebase.html',{'current_order':current_order})
+        cursor=connection.cursor()
+        if request.method=='POST': 
+                    cursor.execute("UPDATE orders SET status='Completed' WHERE empid=%s ",[eid])
+                    cursor.fetchall()
+                    return redirect('/employeedashboard')  
+        else:     
+            cursor.execute("SELECT cid,vehicleno,modelname,description,status FROM orders WHERE empid=%s ",[eid])
+            var=dictfetchall(cursor)
+            context={'orders':var}
+            print(context)
+            return render(request,'employeedashboard.html',context)
       
         
        
     else:
         
         return HttpResponse("Not authorized")
+
+    
+
  
         
         
