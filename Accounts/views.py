@@ -14,8 +14,7 @@ def customer_login_view(request):
         cursor.execute( "SELECT cpassword,cid FROM customer WHERE cname=%s",[username])
         r=cursor.fetchall()   
         for  p in r:
-            print (p)
-            print (p[0])
+       
             
             if p[0]==password:
                 print("success")
@@ -106,21 +105,26 @@ def employee_login_view(request):
         username=request.POST['username']
         password=request.POST['password']
         cursor=connection.cursor()
-        cursor.execute( "SELECT epassword,eid FROM employee WHERE ename=%s",[username])
+        cursor.execute( "SELECT epassword,eid,is_admin FROM employee WHERE ename=%s",[username])
         r=cursor.fetchall()   
         for  p in r:
-            print (p)
-            print (p[0])
-            
+        
             if p[0]==password:
                 print("success")
-                response= redirect('employeedashboard/')
-                response.set_cookie('eid',p[1])
-                response.set_cookie('is_employee','1')
-                return response
-                
+                if p[2]==1:
 
-        
+                    response= redirect('admindashboard/')
+                    response.set_cookie('eid',p[1])
+                    response.set_cookie('is_employee','1')
+                    response.set_cookie('is_admin','1')
+                    return response
+                else:
+
+                    response= redirect('employeedashboard/')
+                    response.set_cookie('eid',p[1])
+                    response.set_cookie('is_employee','1')
+                    response.set_cookie('is_admin','0')
+                    return response
         return render(request,'employee_login.html')                
 
     else: 
@@ -136,7 +140,24 @@ def employee_dashboard(request):
     else:
         
         return HttpResponse("Not authorized")
+
+
+def admin_dashboard(request):
+    is_admin=request.COOKIES.get('is_admin')
+   
+    if is_admin=='1':
+      
+        return render(request,'adminbase.html')
+       
+    else:
         
+        return HttpResponse("Not authorized")
+
+
+
+
+
+
         
 
 
