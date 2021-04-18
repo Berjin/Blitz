@@ -17,7 +17,7 @@ def customer_login_view(request):
             
             if p[0]==password:
                 print("success")
-                response= redirect('dashboard/')
+                response= redirect('/customerprofile')
                 response.set_cookie('cid',p[1])
                 response.set_cookie('is_customer','1')
                 return response
@@ -89,6 +89,58 @@ def customer_signup(request):
         return render(request,'customer_signup.html',{'status':''})
 
 
+def customer_profile(request):
+    is_customer=request.COOKIES.get('is_customer')
+    if is_customer=='1':
+
+        if request.method=='POST':
+            cursor=connection.cursor()
+            cid=int(request.COOKIES.get('cid'))
+            username=request.POST['username']
+            password=request.POST['password']
+            email=request.POST['email']
+            #phoneno=request.POST['phoneno']
+            vehicleno=request.POST['vehicleno']
+
+            # sql1="UPDATE customer SET cname=%s, cpassword=%s,phoneno=%s,email=%s, vehicleno=%s WHERE cid=%s"
+            sql1="UPDATE customer SET cname=%s, cpassword=%s,email=%s, vehicleno=%s WHERE cid=%s"
+            # val=(username,password,phoneno,email,vehicleno,cid)
+            val=(username,password,email,vehicleno,cid)
+
+            cursor.execute(sql1,val)
+            response= redirect('/customer-profile')
+            return response
+
+    
+
+        else:
+            cid=int(request.COOKIES.get('cid'))
+            cursor=connection.cursor()
+            # cursor.execute( "SELECT cname,cpassword,email,phoneno,vehicleno FROM customer WHERE cid=%s",[cid])
+            cursor.execute( "SELECT cname,cpassword,email,vehicleno FROM customer WHERE cid=%s",[cid])
+            r=cursor.fetchall() 
+            for  p in r:
+
+                username=p[0]
+                password=p[1]
+                email=p[2]
+                # phoneno=p[3]
+                # vehicleno=p[4]
+                vehicleno=p[3]
+                #
+            return render(request,'customer_profile.html',{'username':username,'password':password,'email':email,'vehicleno':vehicleno})
+
+            # return render(request,'customer_profile.html',{'username':username,'password':password,'email':email,'phoneno':phoneno,'vehicleno':vehicleno})
+            
+
+
+    else:
+
+
+        return HttpResponse("Not authorized")
+
+
+
 def employee_login_view(request):
     if request.method=='POST':
         username=request.POST['username']
@@ -136,7 +188,7 @@ def admin_dashboard(request):
    
     if is_admin=='1':
       
-        return render(request,'adminbase.html')
+        return render(request,'admindashboard.html')
        
     else:
         
