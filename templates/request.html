@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'styles/attendance.css' %}">
+<title>Request</title>
+{% endblock %}
+{% block content %}
+<div id="main">
+    <div id="booking" class="section">
+		<div class="section-center">
+			<div class="container">
+				<div class="row">
+					<div class="booking-form">
+						<div class="form-header">
+							<h1>Request a Service</h1>
+							<br>
+						</div>
+						<form action="" method ="POST">
+                                                    {% csrf_token %}
+							<div class="row">
+									<div class="form-group">
+										<span class="form-label">Vehicle Model</span>
+										<input class="form-control" type="text" placeholder="" name="vehiclemodel">
+								
+								</div>
+								
+							<div class="form-group">
+								<span class="form-label">Vehicle Number</span>
+								<input class="form-control" type="tel" placeholder="" name="vehicleno">
+							</div>
+							<div class="form-group">
+								<span class="form-label">Pickup Location</span>
+								<input class="form-control" type="text" placeholder="" name="location">
+							</div>
+							<div class="form-group">
+								<span class="form-label">Description</span>
+								<input class="form-control" type="text" placeholder="" name="description">
+							</div>
+							<div class="row">
+								<div class="col-sm-5">
+									<div class="form-group">
+										<span class="form-label">Pickup Date</span>
+										<input class="form-control" type="date" name="datetime" required>
+									</div>
+								</div>
+								<div class="col-sm-7">
+									<div class="row">
+										<div class="col-sm-4">
+											<div class="form-group">
+												<span class="form-label">Hour</span>
+												<select class="form-control">
+													<option>1</option>
+													<option>2</option>
+													<option>3</option>
+													<option>4</option>
+													<option>5</option>
+													<option>6</option>
+													<option>7</option>
+													<option>8</option>
+													<option>9</option>
+													<option>10</option>
+													<option>11</option>
+													<option>12</option>
+												</select>
+												<span class="select-arrow"></span>
+											</div>
+										</div>
+										<div class="col-sm-4">
+											<div class="form-group">
+												<span class="form-label">Min</span>
+												<select class="form-control">
+													<option>05</option>
+													<option>10</option>
+													<option>15</option>
+													<option>20</option>
+													<option>25</option>
+													<option>30</option>
+													<option>35</option>
+													<option>40</option>
+													<option>45</option>
+													<option>50</option>
+													<option>55</option>
+												</select>
+												<span class="select-arrow"></span>
+											</div>
+										</div>
+										<div class="col-sm-4">
+											<div class="form-group">
+												<span class="form-label">AM/PM</span>
+												<select class="form-control">
+													<option>AM</option>
+													<option>PM</option>
+												</select>
+												<span class="select-arrow"></span>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="form-btn" style="margin-left:12px ;margin-top: 24px;">
+								<button type="submit" class="btn btn-primary">Book now</button>
+							</div>
+						</form>
+
+						
+					</div>
+					<span class="form-label">{{status}}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
