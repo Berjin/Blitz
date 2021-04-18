@@ -24,7 +24,7 @@ def customer_login_view(request):
             
             if p[0]==password:
                 print("success")
-                response= redirect('/customerprofile')
+                response= redirect('dashboard/')
                 response.set_cookie('cid',p[1])
                 response.set_cookie('is_customer','1')
                 return response
@@ -34,11 +34,16 @@ def customer_login_view(request):
 
 def customer_dashboard(request):
     is_customer=request.COOKIES.get('is_customer')
-    print(is_customer)
+    cid=int(request.COOKIES.get('cid'))
     if is_customer=='1':
-        return render(request,'base.html')
+        cursor=connection.cursor()
+        cursor.execute("SELECT vehicleno,modelname,description,status FROM orders WHERE cid=%s ",[cid])
+        var=dictfetchall(cursor)
+        context={'orders':var}
+        return render(request,'dashboard.html',context)
     else:
         return redirect('/')
+
 def customer_request(request):
     is_customer=request.COOKIES.get('is_customer')
     print(is_customer)
@@ -99,13 +104,6 @@ def customer_signup(request):
     else:    
         return render(request,'customer_signup.html',{'status':''})
 
-def orders(request):
-    cid=int(request.COOKIES.get('cid'))
-    cursor=connection.cursor()
-    cursor.execute("SELECT vehicleno,modelname,description,status FROM orders WHERE cid=%s ",[cid])
-    var=dictfetchall(cursor)
-    context={'orders':var}
-    return render(request,'orders.html',context)
 
 def customer_profile(request):
     is_customer=request.COOKIES.get('is_customer')
