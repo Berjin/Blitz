@@ -28,10 +28,7 @@
             <td>{{ customer.email }}</td>
             <td>{{ customer.phoneno }}</td>
             <td>{{ customer.vehicleno}}</td>
-            <td><form action="/editcustomers" method=POST>{% csrf_token %}
-
-                
-                
+            <td><form action="/editcustomers" method=POST>{% csrf_token %}                
                 <button id="approve-btn" name='cid' value={{customer.cid}} type="submit">Remove</button>
                 </form></td>
           </tr>

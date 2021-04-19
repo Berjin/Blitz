@@ -85,6 +85,33 @@ def logout(request):
     response.set_cookie('is_admin','0')
     return response
 
+def admindashboard(request):
+    is_admin=request.COOKIES.get('is_admin')
+    eid=int(request.COOKIES.get('eid'))
+    if is_admin=='1':
+        cursor=connection.cursor()
+        if request.method=='POST':
+                    cid = 3
+                    # if request.POST['cancel']=='cancel':
+                    #     cursor.execute("UPDATE orders SET status='Cancelled' WHERE cid=%s ",[cid])
+                    #     cursor.fetchall()
+                    #     return redirect('/admindashboard')  
+                    # elif request.POST['completed']=='completed':
+                    #     cursor.execute("UPDATE orders SET status='Completed' WHERE cid=%s ",[cid])
+                    #     cursor.fetchall()
+                    #     return redirect('/admindashboard')
+                    # elif request.POST['addemployee']=='addemployee':
+                    #     cursor.execute("UPDATE orders SET empid=1 WHERE cid=%s ",[cid])
+                    #     cursor.fetchall()
+                    #     return redirect('/admindashboard')
+        else:     
+            cursor.execute("SELECT cid,vehicleno,modelname,description,status FROM orders")
+            var=dictfetchall(cursor)
+            context={'orders':var}
+            return render(request,'orders.html',context)
+    else:
+        return HttpResponse("Not authorized")
+
 def customer_signup(request):
     if request.method=='POST':
 
@@ -188,12 +215,6 @@ def employee_login_view(request):
     else: 
         return render(request,'employee_login.html')
 
-def dictfetchall(cursor):
-    desc = cursor.description
-    return [
-        dict(zip([col[0] for col in desc], row))
-        for row in cursor.fetchall()
-    ]
 
 def employee_dashboard(request):
     is_employee=request.COOKIES.get('is_employee')

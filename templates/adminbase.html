@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="author" content="Berjin" >
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'images/blitz.jpeg' %}" type="image/x-icon">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'styles/base.css' %}">
@@ -19,8 +19,8 @@
 <body>
     <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="{% url 'editcustomer'%}"><i class="fa fa-user" aria-hidden="true"></i> customers</a>
-        <a href="{% url 'admin'%}"><i class="fa fa-clipboard" aria-hidden="true"></i> Dashboard</a>
+        <a href="{% url 'editcustomer'%}"><i class="fa fa-user" aria-hidden="true"></i> Customers</a>
+        <a href="{% url 'admindashboard'%}"><i class="fa fa-clipboard" aria-hidden="true"></i> Dashboard</a>
         <a href="{% url 'admin' %}"><i class="fa fa-calendar" aria-hidden="true"></i> Request</a>
         <a href="{% url 'service' %}"><i class="fa fa-calendar-check-o"></i> Services</a>
         <a href="{% url 'admin' %}"><i class="fa fa-calendar-check-o"></i> Orders</a>
