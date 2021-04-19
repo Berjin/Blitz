@@ -12,6 +12,10 @@ def dictfetchall(cursor):
         for row in cursor.fetchall()
     ]
 
+def adminfeedback(request):
+    context={}
+    return render(request,'adminfeedback.html',context)
+    
 def customer_login_view(request):
     if request.method=='POST':
         username=request.POST['username']
@@ -37,7 +41,7 @@ def customer_dashboard(request):
     cid=int(request.COOKIES.get('cid'))
     if is_customer=='1':
         cursor=connection.cursor()
-        cursor.execute("SELECT vehicleno,modelname,description,status FROM orders WHERE cid=%s ",[cid])
+        cursor.execute("SELECT oid,vehicleno,modelname,description,status FROM orders WHERE cid=%s ",[cid])
         var=dictfetchall(cursor)
         context={'orders':var}
         return render(request,'dashboard.html',context)
@@ -309,7 +313,8 @@ def services(request):
 
         return redirect('/editservices')
     else:
-
+        sql1="CREATE TABLE IF NOT EXISTS service(sid int ,sname varchar(50) UNIQUE,scost varchar(50) NOT NULL,model varchar(50) , empid int)"
+        cursor.execute(sql1)
         cursor.execute("SELECT sid,sname,scost,model,empid FROM service ")
         var=dictfetchall(cursor)
         context={'services':var}
