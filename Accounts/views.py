@@ -264,6 +264,8 @@ def admin(request):
 def edit_customers(request):
 
     cursor=connection.cursor()
+    sql1="CREATE TABLE IF NOT EXISTS customer(cid int NOT NULL AUTO_INCREMENT PRIMARY KEY,cname varchar(255) UNIQUE,cpassword varchar(255) NOT NULL,email varchar(255) , phoneno varchar(255) ,vehicleno varchar(255))"
+    cursor.execute(sql1)
     if request.method=='POST':
 
         
@@ -283,6 +285,10 @@ def edit_customers(request):
         
         return render(request,'editcustomers.html',context)
 def customer_add(request):
+
+    cursor=connection.cursor()
+    sql1="CREATE TABLE IF NOT EXISTS customer(cid int NOT NULL AUTO_INCREMENT PRIMARY KEY,cname varchar(255) UNIQUE,cpassword varchar(255) NOT NULL,email varchar(255) , phoneno varchar(255) ,vehicleno varchar(255))"
+    cursor.execute(sql1)
     if request.method=='POST':
 
         username=request.POST['username']
@@ -290,9 +296,7 @@ def customer_add(request):
         email=request.POST['email']
         phoneno=request.POST['phoneno']
         vehicleno=request.POST['vehicleno']
-        cursor=connection.cursor()
-        sql1="CREATE TABLE IF NOT EXISTS customer(cid int NOT NULL AUTO_INCREMENT PRIMARY KEY,cname varchar(255) UNIQUE,cpassword varchar(255) NOT NULL,email varchar(255) , phoneno varchar(255) ,vehicleno varchar(255))"
-        cursor.execute(sql1)
+        
         sql2=   "INSERT INTO customer(cname ,cpassword,phoneno,email,vehicleno) VALUES (%s,%s,%s,%s,%s)"
         val=(username,password,phoneno,email,vehicleno)
         cursor.execute(sql2,val)
@@ -326,6 +330,58 @@ def services(request):
         context={'services':var}
 
         return render(request,'editservices.html',context)
+
+
+
+def edit_employee(request):
+
+    cursor=connection.cursor()
+    sql1="CREATE TABLE IF NOT EXISTS employee(eid int NOT NULL AUTO_INCREMENT PRIMARY KEY,ename varchar(255) UNIQUE,epassword varchar(255) NOT NULL,email varchar(255) , phoneno varchar(255) ,is_admin int)"
+    cursor.execute(sql1)
+    if request.method=='POST':
+
+
+        button=request.POST['button']
+        eid=request.POST['eid']
+        if button=='remove':
+
+        
+
+            
+            
+            cursor.execute("DELETE FROM employee WHERE eid=%s",[eid])
+            return redirect('/editemployee')
+        elif button=='makeadmin':
+            
+            cursor.execute("UPDATE employee SET is_admin =1 WHERE eid = %s",[eid])
+            return redirect('/editemployee')
+        
+
+    else:
+       
+
+        cursor.execute("SELECT eid,ename,email,phoneno FROM employee ")
+        var=dictfetchall(cursor)
+        context={'employees':var}
+        
+        return render(request,'editemployees.html',context)
+def employee_add(request):
+    cursor=connection.cursor()
+    if request.method=='POST':
+
+        username=request.POST['username']
+        password=request.POST['password']
+        email=request.POST['email']
+        phoneno=request.POST['phoneno']
+       
+        sql1="CREATE TABLE IF NOT EXISTS employee(eid int NOT NULL AUTO_INCREMENT PRIMARY KEY,ename varchar(255) UNIQUE,epassword varchar(255) NOT NULL,email varchar(255) , phoneno varchar(255) ,is_admin int)"
+        cursor.execute(sql1)
+        sql2=   "INSERT INTO employee(ename ,epassword,phoneno,email) VALUES (%s,%s,%s,%s)"
+        val=(username,password,phoneno,email)
+        cursor.execute(sql2,val)
+        return redirect('/editemployee')
+    else:           
+        return redirect('/editemployee')
 
 
 

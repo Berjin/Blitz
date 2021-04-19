@@ -18,4 +18,6 @@ urlpatterns = [
     path('editservices',views.services, name='service'),
     path('admindashboard',views.admindashboard,name='admindashboard'),
     path('adminfeedback',views.adminfeedback,name='adminfeedback'),
+    path('editemployee',views.edit_employee,name='editemployee'),
+    path('addemployee',views.employee_add,name='addemployee'),
 ]
