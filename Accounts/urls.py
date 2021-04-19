@@ -14,6 +14,7 @@ urlpatterns = [
     path('customer-profile',views.customer_profile,name='customer_profile'),
     path('admin',views.admin,name='admin'),
     path('editcustomers',views.edit_customers,name='editcustomer'),
-     path('addcustomers',views.customer_add,name='addcustomer')
+    path('addcustomers',views.customer_add,name='addcustomer'),
+    path('editservices',views.services, name='service')
 
 ]

@@ -1,0 +1,70 @@
+{% extends 'adminbase.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'styles/attendance.css' %}">
+<title>Attendance </title>
+{% endblock %}
+{% block content %}
+<div id="main">
+
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">Service ID</th>
+            <th scope="col">Service Name </th>
+            <th scope="col">Cost</th>
+            <th scope="col">Vehicle Model</th>
+            <th scope="col">Employees</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+           {% for service in services %} 
+          <tr>
+            <th scope="row"></th>
+            <td>{{ service.sid }}</td>
+            <td>{{ service.sname }}</td>
+            <td>{{ service.cost }}</td>
+            <td>{{ service.model }}</td>
+            <td>{{ service.eid}}</td>-->
+            <td><form action="/editcustomers" method=POST>{% csrf_token %}
+
+                
+                
+                <button id="approve-btn" name='cid' value={{service.sid}} type="submit">Remove</button>
+                </form></td>
+          </tr>
+          {% endfor %}
+    <form action="editservices" method="post">
+        {% csrf_token %}
+        <div class="form-row align-items-center">
+            <div class="col-auto">
+                <label class="sr-only" for="inlineFormInput">Service ID</label>
+                <input type="text" class="form-control mb-2" id="inlineFormInput" placeholder="Service ID" name="sid">
+              </div>
+          <div class="col-auto">
+            <label class="sr-only" for="inlineFormInput">Service Name</label>
+            <input type="text" class="form-control mb-2" id="inlineFormInput" placeholder="Service Name" name="sname">
+          </div>
+          <div class="form-row align-items-center">
+            <div class="col-auto">
+              <label class="sr-only" for="inlineFormInput">Cost</label>
+              <input type="text" class="form-control mb-2" id="inlineFormInput" placeholder="Cost" name="scost">
+            </div>
+
+            <div class="col-auto">
+                <label class="sr-only" for="inlineFormInput">Vehicle Model</label>
+                <input type="text" class="form-control mb-2" id="inlineFormInput" placeholder="Vehicle Model" name="model">
+              </div>
+              
+
+
+            <div class="col-auto">
+                <button type="submit" class="btn btn-primary mb-2">Add Service</button>
+              </div>
+            </div>
+          </form>
+         
+</div>
+{% endblock %}

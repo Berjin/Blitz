@@ -270,6 +270,32 @@ def customer_add(request):
         return redirect('/editcustomers')
 
 
+def services(request):
+    cursor=connection.cursor()
+    if request.method=='POST':
+        sid=request.POST['sid']
+        sname=request.POST['sname']
+        scost=request.POST['scost']
+        model=request.POST['model']
+        
+        cursor=connection.cursor()
+        sql1="CREATE TABLE IF NOT EXISTS service(sid int ,sname varchar(50) UNIQUE,scost varchar(50) NOT NULL,model varchar(50) , empid int)"
+        cursor.execute(sql1)
+        sql2=   "INSERT INTO service(sid ,sname,scost,model) VALUES (%s,%s,%s,%s)"
+        val=(sid,sname,scost,model)
+        cursor.execute(sql2,val)
+       
+
+        return redirect('/editservices')
+    else:
+
+        cursor.execute("SELECT sid,sname,scost,model,empid FROM service ")
+        var=dictfetchall(cursor)
+        context={'services':var}
+
+        return render(request,'editservices.html',context)
+
+
 
 
         
