@@ -82,6 +82,7 @@ def logout(request):
     response.set_cookie('cid',0)
     response.set_cookie('eid',0)
     response.set_cookie('is_customer','0')
+    response.set_cookie('is_admin','0')
     return response
 
 def customer_signup(request):
@@ -170,7 +171,7 @@ def employee_login_view(request):
                 print("success")
                 if p[2]==1:
 
-                    response= redirect('admindashboard/')
+                    response= redirect('/admin')
                     response.set_cookie('eid',p[1])
                     response.set_cookie('is_employee','1')
                     response.set_cookie('is_admin','1')
@@ -218,18 +219,55 @@ def employee_dashboard(request):
         return HttpResponse("Not authorized")
 
 
-def admin_dashboard(request):
+def admin(request):
     is_admin=request.COOKIES.get('is_admin')
    
     if is_admin=='1':
       
-        return render(request,'admindashboard.html')
+        return render(request,'adminmain.html')
        
     else:
         
         return HttpResponse("Not authorized")
 
+def edit_customers(request):
 
+    cursor=connection.cursor()
+    if request.method=='POST':
+
+        
+
+        cid=request.POST['cid']
+        
+        cursor.execute("DELETE FROM customer WHERE cid=%s",[cid])
+        return redirect('/editcustomers')
+
+        
+
+    else:
+
+        cursor.execute("SELECT cid,cname,email,phoneno,vehicleno FROM customer ")
+        var=dictfetchall(cursor)
+        context={'customers':var}
+        
+        return render(request,'editcustomers.html',context)
+def customer_add(request):
+    if request.method=='POST':
+
+        username=request.POST['username']
+        password=request.POST['password']
+        email=request.POST['email']
+        phoneno=request.POST['phoneno']
+        vehicleno=request.POST['vehicleno']
+        cursor=connection.cursor()
+        sql1="CREATE TABLE IF NOT EXISTS customer(cid int NOT NULL AUTO_INCREMENT PRIMARY KEY,cname varchar(255) UNIQUE,cpassword varchar(255) NOT NULL,email varchar(255) , phoneno varchar(255) ,vehicleno varchar(255))"
+        cursor.execute(sql1)
+        sql2=   "INSERT INTO customer(cname ,cpassword,phoneno,email,vehicleno) VALUES (%s,%s,%s,%s,%s)"
+        val=(username,password,phoneno,email,vehicleno)
+        cursor.execute(sql2,val)
+        return redirect('/editcustomers')
+    else:           
+        return redirect('/editcustomers')
 
 
 
