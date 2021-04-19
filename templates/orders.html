@@ -9,6 +9,7 @@
         <thead>
           <tr>
             <th scope="col"></th>
+            <th scope="col">Order ID</th>
             <th scope="col">Customer ID</th>
             <th scope="col">Vehicle Number</th>
             <th scope="col">Vehicle Model</th>
@@ -20,22 +21,29 @@
         <tbody>
             {% for order in orders %} 
           <tr>
+            
             <th scope="row"></th>
+            <td >{{ order.oid }}</td>
             <td>{{ order.cid }}</td>
             <td>{{ order.vehicleno }}</td>
             <td>{{ order.modelname }}</td>
             <td>{{ order.description }}</td>
             <td>{{ order.status}}</td>
-            <!-- <form action="/admindashboard" method=POST>{% csrf_token %}
+             
             <td>
-                <button id="cancel" name='cancel' value='cancel' type="submit">Cancel</button>
+              
+              <form action="/admindashboard" method=POST  >{% csrf_token %}
+                
+                <input id="text" type="text" name="oid" value={{order.oid}} hidden>
+
+                <button id="cancel" name='button' value="cancel" type="submit">Cancel</button>
             </td>
             <td>
-                <button id="completed" name='completed' value='completed' type="submit">Completed</button>
+                <button id="completed" name='button' value='completed' type="submit">Completed</button>
             <td>
-                <button id="addemployee" name='addemployee' value='addemployee' type="submit">Add Employee</button>
+                <button id="addemployee" name='button' value='addemployee' type="submit">Add Employee</button>
             </td>
-        </form> -->
+        </form> 
           </tr>
           {% endfor %}
 

@@ -91,21 +91,25 @@ def admindashboard(request):
     if is_admin=='1':
         cursor=connection.cursor()
         if request.method=='POST':
-                    cid = 3
-                    # if request.POST['cancel']=='cancel':
-                    #     cursor.execute("UPDATE orders SET status='Cancelled' WHERE cid=%s ",[cid])
-                    #     cursor.fetchall()
-                    #     return redirect('/admindashboard')  
-                    # elif request.POST['completed']=='completed':
-                    #     cursor.execute("UPDATE orders SET status='Completed' WHERE cid=%s ",[cid])
-                    #     cursor.fetchall()
-                    #     return redirect('/admindashboard')
-                    # elif request.POST['addemployee']=='addemployee':
-                    #     cursor.execute("UPDATE orders SET empid=1 WHERE cid=%s ",[cid])
-                    #     cursor.fetchall()
-                    #     return redirect('/admindashboard')
-        else:     
-            cursor.execute("SELECT cid,vehicleno,modelname,description,status FROM orders")
+                     
+                     oid=int(request.POST['oid'])
+                     if request.POST['button']=='cancel':
+                        
+                        cursor.execute("UPDATE orders SET status='Cancelled' WHERE oid=%s ",[oid])
+                        cursor.fetchall()
+                        return redirect('/admindashboard')  
+                     elif request.POST['button']=='completed':
+                         
+                        cursor.execute("UPDATE orders SET status='Completed' WHERE oid=%s ",[oid])
+                        cursor.fetchall()
+                        return redirect('/admindashboard')
+                     elif request.POST['button']=='addemployee':
+                        cursor.execute("UPDATE orders SET empid=1 WHERE oid=%s ",[oid])
+                        cursor.fetchall()
+                        
+                        return redirect('/admindashboard')
+        else:         
+            cursor.execute("SELECT oid,cid,vehicleno,modelname,description,status FROM orders")
             var=dictfetchall(cursor)
             context={'orders':var}
             return render(request,'orders.html',context)
