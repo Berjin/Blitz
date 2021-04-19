@@ -24,8 +24,6 @@ def customer_login_view(request):
         cursor.execute( "SELECT cpassword,cid FROM customer WHERE cname=%s",[username])
         r=cursor.fetchall()   
         for  p in r:
-       
-            
             if p[0]==password:
                 print("success")
                 response= redirect('dashboard/')
@@ -142,6 +140,9 @@ def customer_signup(request):
     else:    
         return render(request,'customer_signup.html',{'status':''})
 
+def employee_profile(request):
+    context = {}
+    return render(request,'employeeprofile.html',context)
 
 def customer_profile(request):
     is_customer=request.COOKIES.get('is_customer')
