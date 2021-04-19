@@ -1,0 +1,45 @@
+{% extends 'adminbase.html' %}
+{% load static %}
+{% block head %}
+<title>Dashboard</title>
+{% endblock %}
+{% block content %}
+<div id="main">
+    <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">Customer ID</th>
+            <th scope="col">Vehicle Number</th>
+            <th scope="col">Vehicle Model</th>
+            <th scope="col">Description</th>
+            <th scope="col">Status</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %} 
+          <tr>
+            <th scope="row"></th>
+            <td>{{ order.cid }}</td>
+            <td>{{ order.vehicleno }}</td>
+            <td>{{ order.modelname }}</td>
+            <td>{{ order.description }}</td>
+            <td>{{ order.status}}</td>
+            <!-- <form action="/admindashboard" method=POST>{% csrf_token %}
+            <td>
+                <button id="cancel" name='cancel' value='cancel' type="submit">Cancel</button>
+            </td>
+            <td>
+                <button id="completed" name='completed' value='completed' type="submit">Completed</button>
+            <td>
+                <button id="addemployee" name='addemployee' value='addemployee' type="submit">Add Employee</button>
+            </td>
+        </form> -->
+          </tr>
+          {% endfor %}
+
+        </tbody>
+      </table>
+</div>
+{% endblock %}
