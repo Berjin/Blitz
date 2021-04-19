@@ -7,7 +7,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    <link rel="shortcut icon" href="{% static 'images/logo.png' %}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'images/blitz.jpeg' %}" type="image/x-icon">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="{% static 'styles/login.css' %}">
@@ -52,11 +52,15 @@
             <input class="form-control" type="text" name="vehicleno" placeholder="Vehicle Number">
         </div>
         <div class="sign">
-            <button type="submit" class="btn btn-primary">Sign up</button>
+            <button style="font-style: italic;" type="submit" class="btn btn-primary">Sign up</button>
     
             </div>
     </form>
-    
+    <form method="get" action="/">
+        <div class="sign">
+        <button style="font-style: italic;" type="submit" class="btn btn-warning" >Log In</button>
+    </div>
+    </form>
     </div>
 </div>
     </div>

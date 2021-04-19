@@ -108,14 +108,16 @@ def admindashboard(request):
                         cursor.fetchall()
                         return redirect('/admindashboard')
                      elif request.POST['button']=='addemployee':
-                        cursor.execute("UPDATE orders SET empid=1 WHERE oid=%s ",[oid])
+                        empid = request.POST['empid']
+                        cursor.execute("UPDATE orders SET empid=%s WHERE oid=%s ",([empid],[oid]))
                         cursor.fetchall()
-                        
                         return redirect('/admindashboard')
         else:         
             cursor.execute("SELECT oid,cid,vehicleno,modelname,description,status FROM orders")
             var=dictfetchall(cursor)
-            context={'orders':var}
+            cursor.execute("SELECT eid,ename FROM employee")
+            emp = dictfetchall(cursor)
+            context={'orders':var,'employees':emp}
             return render(request,'orders.html',context)
     else:
         return HttpResponse("Not authorized")
@@ -134,7 +136,7 @@ def customer_signup(request):
         sql2=   "INSERT INTO customer(cname ,cpassword,phoneno,email,vehicleno) VALUES (%s,%s,%s,%s,%s)"
         val=(username,password,phoneno,email,vehicleno)
         cursor.execute(sql2,val)
-        return render(request,'customer_signup.html',{'status':'your account has been successfully created'})
+        return redirect('/')
                 
 
     else:    
@@ -253,7 +255,7 @@ def admin(request):
    
     if is_admin=='1':
       
-        return render(request,'adminmain.html')
+        return redirect('admindashboard')
        
     else:
         
