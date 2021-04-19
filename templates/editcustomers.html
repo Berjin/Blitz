@@ -6,8 +6,8 @@
 {% endblock %}
 {% block content %}
 <div id="main">
- 
-    <table class="table table-hover">
+ <div class="card card-body bg-primary text-white">
+    <table class="table table-hover text-white">
         <thead>
           <tr>
             <th scope="col"></th>
@@ -29,12 +29,11 @@
             <td>{{ customer.phoneno }}</td>
             <td>{{ customer.vehicleno}}</td>
             <td><form action="/editcustomers" method=POST>{% csrf_token %}                
-                <button id="approve-btn" name='cid' value={{customer.cid}} type="submit">Remove</button>
+                <button id="approve-btn" class="btn btn-danger" name='cid' value={{customer.cid}} type="submit">Remove</button>
                 </form></td>
           </tr>
-
-          
           {% endfor %}
+        <div class="card card-body">
           <form action="addcustomers" method="post">
             {% csrf_token %}
             <div class="form-row align-items-center">
@@ -71,7 +70,6 @@
               </div>
             </div>
           </form>
-
-    
+        </div>
 </div>
 {% endblock %}

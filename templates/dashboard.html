@@ -5,22 +5,24 @@
 {% endblock %}
 {% block content %}
 <div id="main">
+  <div class="card card-body bg-primary text-white">
     <h1 >Dashboard</h1>
     <table class="table table-hover">
         <thead>
           <tr>
             <th scope="col"></th>
+            <th scope="col">Order Id</th>
             <th scope="col">Vehicle Number</th>
             <th scope="col">Vehicle Model</th>
             <th scope="col">Description</th>
             <th scope="col">Status</th>
-            <th scope="col"></th>
           </tr>
         </thead>
         <tbody>
             {% for order in orders %} 
           <tr>
             <th scope="row"></th>
+            <td>{{ order.oid }}</td>
             <td>{{ order.vehicleno }}</td>
             <td>{{ order.modelname }}</td>
             <td>{{ order.description }}</td>
@@ -30,5 +32,6 @@
 
         </tbody>
       </table>
+      </div>
 </div>
 {% endblock %}
